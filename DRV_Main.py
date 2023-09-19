@@ -15,3 +15,7 @@ SimMode = 0
 #### 3.Simulation Start ##################################
 Start_Simulation(SimMode, Date_List, User_List, Plug_List)
 
+#from haversine import haversine
+#pos1 = [37.29633, 127.99674]
+#pos2 = [37.29633, 127.99674]
+#print(haversine(pos1, pos2,unit='m'))

@@ -1,6 +1,6 @@
 #230808 Speed Noise Filter
 import numpy as np
-#from haversine import haversine
+
 
 def preprocessing_speed(plug_time_list, plug_sp_list) : 
     for i in range(1, len(plug_sp_list)-10) : 
@@ -29,12 +29,13 @@ def preprocessing_speed(plug_time_list, plug_sp_list) :
                     break
                 elif j == i+9 : 
                     for k in (i, i + 10) :
-                        plug_sp_list[k] = plug_sp_list[k-1] + (plug_sp_list[i+9] - plug_sp_list[i])/10
+                        plug_sp_list[k] = plug_sp_list[k-1] + (plug_sp_list[i+9] - plug_sp_list[i-1])/10
+        
         # 3. 시간 차분이 3초 이상인 경우 앞뒤 5초 데이터를 직선으로 변경
-        if dt >= 3 : 
-            for k in (i-5, i + 5) :
-                delta = (plug_sp_list[i+4] - plug_sp_list[i-5])/10
-                plug_sp_list[k+1] = plug_sp_list[k] + delta
+        #if dt >= 3 : 
+        #    for k in (i-5, i + 5) :
+        #        delta = (plug_sp_list[i+4] - plug_sp_list[i-5])/10
+        #        plug_sp_list[k+1] = plug_sp_list[k] + delta
                        
     return plug_sp_list
 def MovingAverageFilter(plug_time_list, plug_sp_list) :        
@@ -109,11 +110,11 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
         #    dt = 1
         delV = (curSP - preSP) / dt
         # dt가 2초가 넘는 구간이 있으면 -5초 ~ 10초까지 bbi 평가 안함
-        dt_skip = abs(plug_time_list[i+6]-plug_time_list[i+5]) / 1000
+        dt_skip = abs(plug_time_list[i+5]-plug_time_list[i+4]) / 1000
         if dt_skip >= 2 : 
-            cnt_skip = 15
+            cnt_skip = 14
             sp_maf_list[i] = sp_maf_list[i-1]
-            delta_SP = (sp_maf_list[i+14] - sp_maf_list[i])/15
+            delta_SP = (sp_maf_list[i+14] - sp_maf_list[i])/14
             continue
         elif cnt_skip != 0 : 
             sp_maf_list[i] = sp_maf_list[i-1] + delta_SP
@@ -123,8 +124,9 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
     return sp_maf_list
 
 def func_speed_filter(plug_time_list, plug_sp_list, plug_ac_list) : 
+    #if PLUG TYPE == 'LUX1' : 
     plug_sp_list = preprocessing_speed(plug_time_list, plug_sp_list)
-    sp_maf_list = MovingAverageFilter(plug_time_list, plug_sp_list)
-    #sp_est_list = _1stOrderExpon(plug_time_list, sp_maf_list, plug_ac_list)
-        
-    return sp_maf_list#, sp_est_list
+    sp_maf_list = MovingAverageFilter(plug_time_list, plug_sp_list)    
+    #### 
+    
+    return sp_maf_list
