@@ -41,7 +41,7 @@ def Parsing_Plug_Carrot(Date, User, Type) :
     PLUG_File_List = os.listdir(PARSING_PLUG_PATH)
     
     for plug_file in PLUG_File_List : 
-        if plug_file.find(User.lower()) != -1: 
+        if plug_file.find(User) != -1: 
             data_plug = pd.concat([data_plug, pd.read_csv(Path(PARSING_PLUG_PATH, plug_file))])# 파일
             data_plug.sort_values(['ct'])
             data_plug = data_plug.reset_index(drop = True)
