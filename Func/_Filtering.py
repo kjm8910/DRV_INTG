@@ -66,7 +66,7 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
  
 def MovingAverageFilter(plug_time_list, plug_sp_list) :        
     # Moving Average Filter
-    N = 3
+    N = 2
     cnt_dt = N
     sp_maf_list = np.zeros(len(plug_sp_list))
 

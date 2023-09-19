@@ -64,6 +64,7 @@ def Check_Android(Date, User) :
             file_list = os.listdir(Path(PATH_AND, folder_name))
             if date_folder == str(Date) : 
                 for file_name in file_list : 
+                    file_name = file_name.lower()
                     if file_name.find(User.lower()) == 0: 
                         flag_and = True
                         #파일 Path나 CSV 아웃풋으로 설정 
@@ -73,13 +74,21 @@ def Check_Android(Date, User) :
     return flag_and
 
 def Check_Plug(Date, User) : 
-    PATH_AND = Path(Path_Data, 'Plug', 'FB_Data')
-    folder_list = os.listdir(PATH_AND)
-    flag_and = False
+    PATH_PLUG = Path(Path_Data, 'Plug', 'FB_Data')
+    folder_list = os.listdir(PATH_PLUG)
+    flag_plug = False
     for folder_name in folder_list : 
         date_folder = folder_name.replace('-','')
-        if date_folder == str(Date) : 
-            flag_and = True
-            break
-    return flag_and
+        try : 
+            file_list = os.listdir(Path(PATH_PLUG, folder_name))
+            if date_folder == str(Date) : 
+                for file_name in file_list : 
+                    file_name = file_name.lower()
+                    if file_name.find(User.lower()) == 0: 
+                        flag_plug = True
+                        break
+        except : 
+            continue    
+        
+    return flag_plug
             

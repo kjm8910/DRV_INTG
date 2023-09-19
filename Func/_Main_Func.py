@@ -15,9 +15,10 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                 # a. Referece 유/무 판단 / 플러그 데이터 유/무 판단
                 flag_and = Check_Android(cDate, User)
                 flag_plug = Check_Plug(cDate, User)
-                if flag_plug == False : break # 플러그 데이터 없으면 다음 데이터 확인
+                if flag_plug == False : continue # 플러그 데이터 없으면 다음 데이터 확인
                 # b. Parsing
                 Plug_Data, Ref_Data = Parsing_Main(cDate, User, 0, flag_and)
+                
                 #### 2. 필터 & 예외처리 ##############################
                 if flag_and == True : 
                     ref_ln_list = list(Ref_Data['latitude'])
@@ -35,6 +36,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
 
                 sp_maf_list = func_speed_filter(plug_time_list,\
                     plug_sp_list, plug_ac_list)
+                
                 #### 3. BBI Detection #############################
                 df_raw_bbi, bbi_list_raw = \
                 bbi_detection_no_exception(plug_time_list, plug_sp_raw_list,\
@@ -42,9 +44,15 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                 df_maf_bbi, bbi_list_maf = \
                 bbi_detection_no_exception(plug_time_list, sp_maf_list,\
                     plug_ln_list, plug_lt_list)
-                df_ref_bbi, bbi_list_ref = \
-                bbi_detection_no_exception(ref_time_list, ref_sp_list,\
-                    ref_ln_list, ref_lt_list)
+                if flag_and == True :
+                    df_ref_bbi, bbi_list_ref = \
+                    bbi_detection_no_exception(ref_time_list, ref_sp_list,\
+                        ref_ln_list, ref_lt_list)
+                else : 
+                    df_ref_bbi = []
+                    ref_time_list = []
+                    ref_sp_list = []
+                        
                 #### 4. 분석 결과 출력 ###############################
                 # a. 지도, b. 그래프, c. BBI 결과
                 if flag_and == False : bbi_list_ref = []
@@ -54,8 +62,8 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                 ##########
                 figure_plot(plug_time_list, plug_sp_raw_list, sp_maf_list,\
                     ref_time_list, ref_sp_list, df_raw_bbi, df_maf_bbi, \
-                        df_ref_bbi, flag_and)
-                
+                        df_ref_bbi, flag_and, User, cDate)
+                a = 1
                 ## LOWELL ##
                 
                 
