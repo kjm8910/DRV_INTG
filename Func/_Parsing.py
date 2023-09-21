@@ -111,11 +111,19 @@ def Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data) :
     trip_number = max(Plug_Data.trip_id)
     ad_ref = 0
     #0. 트립 아이디로 데이터 분리
-    for i in range(0, trip_number + 1) : 
+    for i in range(0, trip_number) : 
         cTrip_id = i + 1
         Plug_Data_Trip_list.append(Plug_Data[Plug_Data.trip_id == cTrip_id])
-        Ref_Data_Trip_list.append(Ref_Data[Ref_Data.time[ad_ref:] \
-            <= max(Plug_Data_Trip_list[i].ct)])
+        if flag_and == True : 
+        
+            try : 
+                mask = (Ref_Data.time[ad_ref:] <= max(Plug_Data_Trip_list[i].ct)) & (Ref_Data.time[ad_ref:] >= min(Plug_Data_Trip_list[i].ct))
+                Ref_Data_Trip_list.append(Ref_Data[ad_ref:].loc[mask])
+                ad_ref += (len(Ref_Data_Trip_list[i-1]) + 1)
+            except : 
+                Ref_Data_Trip_list.append(pd.DataFrame([]))
+        else : 
+            Ref_Data_Trip_list = []
         
     return trip_number, Plug_Data_Trip_list, Ref_Data_Trip_list
 

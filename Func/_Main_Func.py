@@ -21,59 +21,61 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     Plug_Data, Ref_Data = Parsing_Main(cDate, User, 0, flag_and)
                     # c. 트립으로 나누기
                     Trip_Num, Plug_Data_Trip, Ref_Data_Trip = Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data)
-                    for i in range(0, Trip_Num + 1) : 
-                        #Plug_Data_Trip = 
-                        a = 1
+                    
                     #### 2. 필터 & 예외처리 ##############################
-                    if flag_and == True : 
-                        ref_ln_list = list(Ref_Data['latitude'])
-                        ref_lt_list = list(Ref_Data['longitude'])
-                        ref_sp_list = list(Ref_Data['speed']*3.6)
-                        ref_ac_list = list(Ref_Data['accuracy'])
-                        ref_time_list = list(Ref_Data['time'])
-                    try : 
-                        plug_sp_list = list(Plug_Data['speed'])
-                        plug_sp_raw_list = list(Plug_Data['speed']) 
-                    except : 
-                        plug_sp_list = list(Plug_Data['sp'])
-                        plug_sp_raw_list = list(Plug_Data['sp']) 
-                    plug_time_list = list(Plug_Data['ct'])
-                    plug_ln_list = list(Plug_Data['ln'])
-                    plug_lt_list = list(Plug_Data['lt'])
-                    plug_ac_list = list(Plug_Data['ac'])
+                    for i in range(0, Trip_Num) : 
+                        if len(Ref_Data_Trip[i]) == 0 : flag_and = False
+                        else : flag_and = True
+                        if flag_and == True : 
+                            ref_ln_list = list(Ref_Data_Trip[i]['latitude'])
+                            ref_lt_list = list(Ref_Data_Trip[i]['longitude'])
+                            ref_sp_list = list(Ref_Data_Trip[i]['speed']*3.6)
+                            ref_ac_list = list(Ref_Data_Trip[i]['accuracy'])
+                            ref_time_list = list(Ref_Data_Trip[i]['time'])                            
+                        try : 
+                            plug_sp_list = list(Plug_Data_Trip[i]['speed'])
+                            plug_sp_raw_list = list(Plug_Data_Trip[i]['speed']) 
+                        except : 
+                            plug_sp_list = list(Plug_Data_Trip[i]['sp'])
+                            plug_sp_raw_list = list(Plug_Data_Trip[i]['sp']) 
+                        plug_time_list = list(Plug_Data_Trip[i]['ct'])
+                        plug_ln_list = list(Plug_Data_Trip[i]['ln'])
+                        plug_lt_list = list(Plug_Data_Trip[i]['lt'])
+                        plug_ac_list = list(Plug_Data_Trip[i]['ac'])
 
-                    sp_maf_list = func_speed_filter(plug_time_list,\
-                        plug_sp_list, plug_ac_list)
+                        sp_maf_list = func_speed_filter(plug_time_list,\
+                            plug_sp_list, plug_ac_list)
                     
-                    #### 3. BBI Detection #############################
-                    # 1 : 급출발, 2: 급가속, 3 : 급정지, 4 : 급감속
-                    df_raw_bbi, bbi_list_raw = \
-                    bbi_detection_no_exception(plug_time_list, plug_sp_raw_list,\
-                        plug_ln_list, plug_lt_list)
-                    df_maf_bbi, bbi_list_maf = \
-                    bbi_detection_no_exception(plug_time_list, sp_maf_list,\
-                        plug_ln_list, plug_lt_list)
-                    if flag_and == True :
-                        df_ref_bbi, bbi_list_ref = \
-                        bbi_detection_no_exception(ref_time_list, ref_sp_list,\
-                            ref_ln_list, ref_lt_list)
-                    else : 
-                        df_ref_bbi = []
-                        ref_time_list = []
-                        ref_sp_list = []
+                        #### 3. BBI Detection #############################
+                        # 1 : 급출발, 2: 급가속, 3 : 급정지, 4 : 급감속
+                        df_raw_bbi, bbi_list_raw = \
+                        bbi_detection_no_exception(plug_time_list, plug_sp_raw_list,\
+                            plug_ln_list, plug_lt_list)
+                        df_maf_bbi, bbi_list_maf = \
+                        bbi_detection_no_exception(plug_time_list, sp_maf_list,\
+                            plug_ln_list, plug_lt_list)
+                        if flag_and == True :
+                            df_ref_bbi, bbi_list_ref = \
+                            bbi_detection_no_exception(ref_time_list, ref_sp_list,\
+                                ref_ln_list, ref_lt_list)
+                        else : 
+                            df_ref_bbi = []
+                            ref_time_list = []
+                            ref_sp_list = []
                             
-                    #### 4. 분석 결과 출력 ###############################
-                    # a. 지도, b. 그래프, c. BBI 결과
-                    if flag_and == False : bbi_list_ref = []
-                    print(str(cDate) +'//' + User)
-                    bbi_result_table(bbi_list_raw, bbi_list_maf, bbi_list_ref)
-                    
-                    ########## Plot Graph
-                    figure_plot(plug_time_list, plug_sp_raw_list, sp_maf_list,\
-                        ref_time_list, ref_sp_list, df_raw_bbi, df_maf_bbi, \
-                            df_ref_bbi, flag_and, User, cDate)
-                    ########## 
-                    #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
-                    ## LOWELL ##
+                        #### 4. 분석 결과 출력 ###############################
+                        # a. 지도, b. 그래프, c. BBI 결과
+                        if flag_and == False : bbi_list_ref = []
+                        print(str(cDate) +' ' + User+' '+'Trip No.' + str(i+1))
+                        bbi_result_table(bbi_list_raw, bbi_list_maf, bbi_list_ref, i)
+                        print('\n')
+                        ########## Plot Graph ################
+                        figure_plot(plug_time_list, plug_sp_raw_list, sp_maf_list,\
+                            ref_time_list, ref_sp_list, df_raw_bbi, df_maf_bbi, \
+                                df_ref_bbi, flag_and, User, cDate)
+                        
+                        ########## 
+                        #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
+                        ## LOWELL ##
                     
                 

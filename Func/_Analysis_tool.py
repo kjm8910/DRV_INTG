@@ -2,7 +2,7 @@ from tabulate import tabulate
 import folium
 from pathlib import Path
 
-def bbi_result_table(bbi_raw_result, bbi_maf_result, bbi_ref_result) : 
+def bbi_result_table(bbi_raw_result, bbi_maf_result, bbi_ref_result, Trip_No) : 
 
     if len(bbi_ref_result) == 0 : 
         x = [["Raw",bbi_raw_result[0],bbi_raw_result[1],
