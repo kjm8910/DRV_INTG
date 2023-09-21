@@ -21,7 +21,7 @@ def preprocessing_speed(plug_time_list, plug_sp_list) :
         #    preSP를 기준으로 +- 10km/h 차이가 나는 다음 스탭의 속력을 찾아 중간 스탭의 값들을 preSP로 변경
         #    preSP로부터 10초 앞의 데이터까지 찾았는데 찾지 못하면 preSP와 10초 후 데이터를 직선 연결
         if del_sp >= 15 and dt >= 2:
-            for j in (i+1, i + 10) : #i번째는 이미 15키로 차이가 나는 상황이라 볼 필요가 없음
+            for j in range(i+1, i + 10) : #i번째는 이미 15키로 차이가 나는 상황이라 볼 필요가 없음
                 find_sp = abs(preSP - plug_sp_list[j])
                 if find_sp <= 10 : 
                     for k in range(i,j) : 
