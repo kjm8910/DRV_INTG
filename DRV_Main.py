@@ -1,7 +1,11 @@
 #### Module Define ######################################
+<<<<<<< HEAD
 from Func._Main_Func import *  ###
+=======
+from Func._Main_Func import * #####
+>>>>>>> 796dd02e9494903c938828c1232ac668bd8c8012
 #### 0. 초기값 입력 ########################################
-# a. 분석할 날짜
+# a. 분석할 날짜x
 #   [0] : Start Date / [1] End Date
 Date_List = ['20230917', '20230920']
 # b. User List
