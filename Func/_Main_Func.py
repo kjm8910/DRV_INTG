@@ -20,25 +20,23 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     flag_and = Check_Android(cDate, User)
                     Plug_Data, Ref_Data = Parsing_Main(cDate, User, 0, flag_and)
                     # c. 트립으로 나누기
-                    #Plug_Data_Trip, Ref_Data_Trip = Data_Seperate_Trip(Plug_Data, Ref_Data)
-                    #for 
-                    
-                    
+                    Trip_Num, Plug_Data_Trip, Ref_Data_Trip = Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data)
+                    for i in range(0, Trip_Num + 1) : 
+                        #Plug_Data_Trip = 
+                        a = 1
                     #### 2. 필터 & 예외처리 ##############################
-                    #for i in range(0, Plug_Data['trip_id']) : 
-                    ##    c_trip_id = Plug_Data['trip_id'][i]
-                     #   if c_trip_id != trip_id : 
-                    #        trip_id = c_trip_id
-                    #        ad_ref = find_ad_ref_plug(plug_time_list)
                     if flag_and == True : 
                         ref_ln_list = list(Ref_Data['latitude'])
                         ref_lt_list = list(Ref_Data['longitude'])
                         ref_sp_list = list(Ref_Data['speed']*3.6)
                         ref_ac_list = list(Ref_Data['accuracy'])
                         ref_time_list = list(Ref_Data['time'])
-                        
-                    plug_sp_list = list(Plug_Data['speed'])
-                    plug_sp_raw_list = list(Plug_Data['speed']) 
+                    try : 
+                        plug_sp_list = list(Plug_Data['speed'])
+                        plug_sp_raw_list = list(Plug_Data['speed']) 
+                    except : 
+                        plug_sp_list = list(Plug_Data['sp'])
+                        plug_sp_raw_list = list(Plug_Data['sp']) 
                     plug_time_list = list(Plug_Data['ct'])
                     plug_ln_list = list(Plug_Data['ln'])
                     plug_lt_list = list(Plug_Data['lt'])
@@ -75,7 +73,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         ref_time_list, ref_sp_list, df_raw_bbi, df_maf_bbi, \
                             df_ref_bbi, flag_and, User, cDate)
                     ########## 
-                    folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
+                    #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
                     ## LOWELL ##
                     
                 

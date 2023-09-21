@@ -25,9 +25,8 @@ def Android_Data_Download() :
 
     PROJECT_ID = "drv-bbi-test"
 
-    cred = credentials.Certificate('/Users/jmkim/Documents/'+\
-        'Finn_Python_Project/FireBase_KEY/'+\
-            'drv-bbi-test-firebase-adminsdk-wpdve-3732218d83.json')
+    cred = credentials.Certificate('//Users/jmkim/Documents/Finn_Python_Project/FireBase_KEY/'+\
+            'drv-bbi-test-firebase-adminsdk-wpdve-3f64ab418b.json')
     try : 
         storage_admin = firebase_admin.get_app()
     except : 
@@ -79,9 +78,8 @@ def PlugData_Upload() :
     ROJECT_PATH = Path('.').absolute()
 
     PROJECT_ID = "drv-bbi-test" 
-    cred = credentials.Certificate('/Users/jmkim/Documents/'+\
-        'Finn_Python_Project/FireBase_KEY/'+\
-            'drv-bbi-test-firebase-adminsdk-wpdve-3732218d83.json')
+    cred = credentials.Certificate('//Users/jmkim/Documents/Finn_Python_Project/FireBase_KEY/'+\
+            'drv-bbi-test-firebase-adminsdk-wpdve-3f64ab418b.json')
     
     try : 
         storage_admin = firebase_admin.get_app()

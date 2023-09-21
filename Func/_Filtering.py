@@ -38,32 +38,6 @@ def preprocessing_speed(plug_time_list, plug_sp_list) :
         #        plug_sp_list[k+1] = plug_sp_list[k] + delta
                        
     return plug_sp_list
-def MovingAverageFilter(plug_time_list, plug_sp_list) :        
-    # Moving Average Filter
-    N = 2
-    cnt_dt = N
-    sp_maf_list = np.zeros(len(plug_sp_list))
-
-    del_sp = 1
-    dt = 1
-    sp_maf_list[0] = plug_sp_list[0]
-    for i in range(1, len(plug_sp_list)-N) : 
-        cur_SP = plug_sp_list[i]
-        #시간 차분 / 속력 차분 계산( 현재 값 - 이전 값)
-        if i <= 10 : 
-            sp_maf_list[i] = plug_sp_list[i]
-            continue
-        else        : 
-            dt = (plug_time_list[i] - plug_time_list[i-1]) / 1000
-            del_sp = abs(plug_sp_list[i] - plug_sp_list[i-1])
-
-        # MAF       
-        sp_maf = np.mean(plug_sp_list[i:i+N])
-        sp_maf_list[i] = sp_maf
-        
-    sp_maf_list[len(plug_sp_list)-N:] = plug_sp_list[len(plug_sp_list)-N:]
-    
-    return sp_maf_list
  
 def MovingAverageFilter(plug_time_list, plug_sp_list) :        
     # Moving Average Filter
@@ -95,7 +69,7 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
     cnt_skip = 0
     
     # 1. 초반 10초는 BBI 처리 안함(1초부터 9초까지 데이터를 데이터를 10초 데이터로 변경)
-    sp_maf_list[0:10] = sp_maf_list[9] 
+    sp_maf_list[0:20] = sp_maf_list[19] 
     
     for i in range(1, len(sp_maf_list)-14) : 
     

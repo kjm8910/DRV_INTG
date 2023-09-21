@@ -2,11 +2,14 @@ from pathlib import Path
 import os
 #import re
 import pandas as pd
-
-#Path_Ref = '/Users/jmkim/Documents/Finn_Python_Project/Data/DRV/Android'
-Path_Plug = '/Volumes/Data Lab/0. DRV/2. DRV_DATA/Plug/FB_Data'
-Path_Ref = '/Volumes/Data Lab/0. DRV/2. DRV_DATA/Android'
-Path_Data = '/Volumes/Data Lab/0. DRV/2. DRV_DATA'
+import matplotlib.pyplot as plt
+import numpy as np
+Path_Plug = '/Users/jmkim/Documents/Finn_Python_Project/Data/DRV/Plug/FB_Data'
+Path_Ref = '/Users/jmkim/Documents/Finn_Python_Project/Data/DRV/Android'
+Path_Data = '/Users/jmkim/Documents/Finn_Python_Project/Data/DRV'
+#Path_Plug = '/Volumes/Data Lab/0. DRV/2. DRV_DATA/Plug/FB_Data'
+#Path_Ref = '/Volumes/Data Lab/0. DRV/2. DRV_DATA/Android'
+#Path_Data = '/Volumes/Data Lab/0. DRV/2. DRV_DATA'
 
 def Parsing_Main(Date, User, Type, Flag_AND) : 
     # 1. Parsing PLUG
@@ -41,7 +44,20 @@ def Parsing_Plug_Carrot(Date, User, Type) :
     
     for plug_file in PLUG_File_List : 
         if plug_file.find(User) != -1: 
-            data_plug = pd.concat([data_plug, pd.read_csv(Path(PARSING_PLUG_PATH, plug_file))])# 파일
+            data_plug = pd.concat([data_plug, pd.read_csv(Path(PARSING_PLUG_PATH, plug_file))])# 파일 
+            # ln lt == 0 && ac = 0 & 100
+            idx = data_plug[data_plug['ln'] == 0].index
+            data_plug.drop(idx , inplace=True)
+            idx = data_plug[data_plug['ac'] == 0].index
+            data_plug.drop(idx , inplace=True)
+            idx = data_plug[data_plug['ac'] == 100].index
+            data_plug.drop(idx , inplace=True) 
+            
+            #idx = data_plug[data_plug['ct'] <= 1692000000000].index
+            #data_plug.drop(idx , inplace=True)
+            #idx = data_plug[data_plug['ct'] >= 2000000000000].index
+            #data_plug.drop(idx , inplace=True)
+            
             data_plug.sort_values(['trip_id','ct'])
             data_plug = data_plug.reset_index(drop = True)
     
@@ -61,7 +77,7 @@ def Check_Android(Date, User) :
             if date_folder == str(Date) : 
                 for file_name in file_list : 
                     file_name = file_name.lower()
-                    if file_name.find(User.lower()) == 0: 
+                    if file_name.find(User.lower()) != -1: 
                         flag_and = True
                         #파일 Path나 CSV 아웃풋으로 설정 
                         break
@@ -76,36 +92,70 @@ def Check_Plug(Date, User) :
     for folder_name in folder_list : 
         date_folder = folder_name.replace('-','')
         try : 
-            file_list = os.listdir(Path(PATH_PLUG, folder_name))
             if date_folder == str(Date) : 
+                file_list = os.listdir(Path(PATH_PLUG, folder_name))
                 for file_name in file_list : 
                     file_name = file_name.lower()
-                    if file_name.find(User.lower()) == 0: 
+                    if file_name.find(User.lower()) != -1: 
                         flag_plug = True
                         break
         except : 
-            continue    
+            continue
         
     return flag_plug
-'''
-def Data_Seperate_Trip(Plug_Data, Ref_Data) : 
+
+def Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data) : 
     
-    trip_id = Plug_Data.trip_id[0]
+    Plug_Data_Trip_list = []
+    Ref_Data_Trip_list = []
+    trip_number = max(Plug_Data.trip_id)
+    ad_ref = 0
+    #0. 트립 아이디로 데이터 분리
+    for i in range(0, trip_number + 1) : 
+        cTrip_id = i + 1
+        Plug_Data_Trip_list.append(Plug_Data[Plug_Data.trip_id == cTrip_id])
+        Ref_Data_Trip_list.append(Ref_Data[Ref_Data.time[ad_ref:] \
+            <= max(Plug_Data_Trip_list[i].ct)])
+        
+    return trip_number, Plug_Data_Trip_list, Ref_Data_Trip_list
+
+'''
+def Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data) : 
+    
+    Trip_DF = []
+    trip_number = max(Plug_Data.trip_id)
     trip_id_list = []
     trip_ad = 0
-    for i in range(0, len(Plug_Data.trip_id)) : 
+    trip_id = 1
+    
+    for i in range(0, trip_number+1) : 
         if trip_id != Plug_Data.trip_id[i] : 
             trip_id = Plug_Data.trip_id[i]
             trip_id_list.append([trip_ad, i-1])
             trip_ad = i
-        elif i == len(Plug_Data.trip_id)-1 : 
+        elif i == trip_number : 
             trip_id_list.append([trip_ad, i])
-    plug_time = Plug_Data.ct[0]
-    if Ref_Data != 0 :
+    
+    plug_time_min = Plug_Data.ct[trip_id_list[0][0]]
+    plug_time_max = Plug_Data.ct[trip_id_list[0][1]]
+    Ref_Data_Trip = []
+    cnt_plug_time = 0
+    if len(Ref_Data) != 0 :
         for i in range(0, len(Ref_Data)) : 
-            a = 10
-    else : 
-        Ref_Data_Trip = []
+            ref_time = Ref_Data.time[i]
+            if ref_time >= plug_time_min and ref_time <= plug_time_max : 
+                try : 
+                    max_ad = max(np.where(Ref_Data.time <= plug_time_max)[0])
+                except : 
+                    max_ad = max(Ref_Data.time)
+                    
+                Ref_Data_Trip.append([i, max_ad])
+                cnt_plug_time += 1
+                if len(trip_id_list) > cnt_plug_time : break
+                
+                plug_time_min = Plug_Data.ct[trip_id_list[cnt_plug_time][0]]
+                plug_time_max = Plug_Data.ct[trip_id_list[cnt_plug_time][1]]
         
-    return trip_id_list, Ref_Data_Trip
-    '''
+    return trip_number, trip_id_list, Ref_Data_Trip
+
+'''
