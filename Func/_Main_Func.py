@@ -23,15 +23,34 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     Trip_Num, Plug_Data_Trip, Ref_Data_Trip = Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data)
                     
                     #### 2. 필터 & 예외처리 ##############################
+                    
+                    PLUG_RAW_SAVE = []
+                    PLUG_TIME_SAVE = []
+                    PLUG_MAF_SAVE = []
+                    REF_RAW_SAVE = []
+                    REF_TIME_SAVE = []                    
+                    
+                    DF_PLUG_SAVE = []
+                    DF_PLUG_MAF_SAVE = []
+                    DF_REF_SAVE = []
+                    
                     for i in range(0, Trip_Num) : 
-                        if len(Ref_Data_Trip[i]) == 0 : flag_and = False
-                        else : flag_and = True
+                        
+                        if len(Ref_Data_Trip) == 0 : flag_and = False
+                        elif len(Ref_Data_Trip[i]) : flag_and = False
+                        else :                          flag_and = True
+                        
                         if flag_and == True : 
                             ref_ln_list = list(Ref_Data_Trip[i]['latitude'])
                             ref_lt_list = list(Ref_Data_Trip[i]['longitude'])
                             ref_sp_list = list(Ref_Data_Trip[i]['speed']*3.6)
                             ref_ac_list = list(Ref_Data_Trip[i]['accuracy'])
-                            ref_time_list = list(Ref_Data_Trip[i]['time'])                            
+                            ref_time_list = list(Ref_Data_Trip[i]['time'])
+                            
+                            # DATA SAVE
+                            REF_TIME_SAVE(ref_time_list)
+                            REF_RAW_SAVE(ref_sp_list)
+                                                
                         try : 
                             plug_sp_list = list(Plug_Data_Trip[i]['speed'])
                             plug_sp_raw_list = list(Plug_Data_Trip[i]['speed']) 
@@ -45,7 +64,12 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
 
                         sp_maf_list = func_speed_filter(plug_time_list,\
                             plug_sp_list, plug_ac_list)
-                    
+
+                        ### DATA SAVE ####
+                        PLUG_TIME_SAVE.append(plug_time_list)
+                        PLUG_RAW_SAVE.append(plug_sp_raw_list)
+                        PLUG_MAF_SAVE.append(sp_maf_list)
+                        
                         #### 3. BBI Detection #############################
                         # 1 : 급출발, 2: 급가속, 3 : 급정지, 4 : 급감속
                         df_raw_bbi, bbi_list_raw = \
@@ -54,10 +78,13 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         df_maf_bbi, bbi_list_maf = \
                         bbi_detection_no_exception(plug_time_list, sp_maf_list,\
                             plug_ln_list, plug_lt_list)
+                        DF_PLUG_SAVE.append(df_raw_bbi)
+                        DF_PLUG_MAF_SAVE.append(df_maf_bbi)
                         if flag_and == True :
                             df_ref_bbi, bbi_list_ref = \
                             bbi_detection_no_exception(ref_time_list, ref_sp_list,\
                                 ref_ln_list, ref_lt_list)
+                            DF_REF_SAVE(df_ref_bbi)
                         else : 
                             df_ref_bbi = []
                             ref_time_list = []
@@ -69,11 +96,12 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         print(str(cDate) +' ' + User+' '+'Trip No.' + str(i+1))
                         bbi_result_table(bbi_list_raw, bbi_list_maf, bbi_list_ref, i)
                         print('\n')
-                        ########## Plot Graph ################
-                        figure_plot(plug_time_list, plug_sp_raw_list, sp_maf_list,\
-                            ref_time_list, ref_sp_list, df_raw_bbi, df_maf_bbi, \
-                                df_ref_bbi, flag_and, User, cDate)
                         
+                    ########## Plot Graph ################
+                    figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\
+                        REF_TIME_SAVE, REF_RAW_SAVE, DF_PLUG_SAVE, DF_PLUG_MAF_SAVE, \
+                            DF_REF_SAVE, flag_and, User, cDate, Trip_Num)
+                    
                         ########## 
                         #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
                         ## LOWELL ##
