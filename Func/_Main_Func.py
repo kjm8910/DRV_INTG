@@ -107,7 +107,3 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         ########## 
                         #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
                         ## LOWELL ##
-    elif SimMode == 1 : 
-        for User in User_List : 
-            for cDate in range(start_date, end_date + 1) : 
-                
