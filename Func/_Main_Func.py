@@ -48,8 +48,11 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                             ref_time_list = list(Ref_Data_Trip[i]['time'])
                             
                             # DATA SAVE
-                            REF_TIME_SAVE(ref_time_list)
-                            REF_RAW_SAVE(ref_sp_list)
+                            REF_TIME_SAVE.append(ref_time_list)
+                            REF_RAW_SAVE.append(ref_sp_list)
+                        else : 
+                            REF_TIME_SAVE.append([])
+                            REF_RAW_SAVE.append([])
                                                 
                         try : 
                             plug_sp_list = list(Plug_Data_Trip[i]['speed'])
@@ -84,7 +87,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                             df_ref_bbi, bbi_list_ref = \
                             bbi_detection_no_exception(ref_time_list, ref_sp_list,\
                                 ref_ln_list, ref_lt_list)
-                            DF_REF_SAVE(df_ref_bbi)
+                            DF_REF_SAVE.append(df_ref_bbi)
                         else : 
                             df_ref_bbi = []
                             ref_time_list = []
