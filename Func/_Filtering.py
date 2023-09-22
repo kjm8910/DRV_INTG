@@ -28,7 +28,7 @@ def preprocessing_speed(plug_time_list, plug_sp_list) :
                         plug_sp_list[k] = plug_sp_list[k-1] + (plug_sp_list[j] - plug_sp_list[i-1])/(j-i)
                     break
                 elif j == i+9 : 
-                    for k in (i, i + 10) :
+                    for k in range(i, i + 10) :
                         plug_sp_list[k] = plug_sp_list[k-1] + (plug_sp_list[i+9] - plug_sp_list[i-1])/10
         
         # 3. 시간 차분이 3초 이상인 경우 앞뒤 5초 데이터를 직선으로 변경
