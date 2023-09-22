@@ -3,9 +3,9 @@ from Func._Main_Func import *
 #### 0. 초기값 입력 ########################################
 # a. 분석할 날짜
 #   [0] : Start Date / [1] End Date
-Date_List = ['20230917', '20230920']
+Date_List = ['20230910', '20230922']
 # b. User List
-User_List = ['Finn']
+User_List = ['Benjamin']
 # c. Plug type List
 Plug_List = ['lux1']
 # d. Simulation Mode Type

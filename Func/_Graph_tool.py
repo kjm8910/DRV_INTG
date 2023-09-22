@@ -48,13 +48,13 @@ def figure_plot(plug_time_list, plug_sp_raw_list, maf_result_list, \
             axes[0].grid()
             axes[0].set_title(User+' '+str(Date)+'!!!'+ "  Trip No." + str(i+1))
             axes[1].plot(plug_time_list[i], maf_result_list[i], 'g.', label='ma')
-            bbi_time_maf = df_bbi_maf.Time
+            bbi_time_maf = df_bbi_maf[i].Time
             y_bbi_maf = np.zeros(len(bbi_time_maf))-5
             axes[1].plot(bbi_time_maf, y_bbi_maf, 'b*')
             axes[1].legend()
             axes[1].grid()
 
-            bbi_time_and = df_bbi_ref.Time
+            bbi_time_and = df_bbi_ref[i].Time
             axes[2].plot(ref_time_list[i], ref_sp_list[i], 'b.', label='ref')
             y_bbi_and = np.zeros(len(bbi_time_and))-5
             axes[2].plot(bbi_time_and, y_bbi_and, '*')
@@ -73,6 +73,6 @@ def figure_plot(plug_time_list, plug_sp_raw_list, maf_result_list, \
         if num == 'c' : 
             plt.close('all')
             break
-        time.sleep(2)
+        time.sleep(1)
     
     

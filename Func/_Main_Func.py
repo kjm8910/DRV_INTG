@@ -23,7 +23,6 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     Trip_Num, Plug_Data_Trip, Ref_Data_Trip = Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data)
                     
                     #### 2. 필터 & 예외처리 ##############################
-                    
                     PLUG_RAW_SAVE = []
                     PLUG_TIME_SAVE = []
                     PLUG_MAF_SAVE = []
@@ -37,7 +36,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     for i in range(0, Trip_Num) : 
                         
                         if len(Ref_Data_Trip) == 0 : flag_and = False
-                        elif len(Ref_Data_Trip[i]) : flag_and = False
+                        elif len(Ref_Data_Trip[i]) == 0: flag_and = False
                         else :                          flag_and = True
                         
                         if flag_and == True : 
@@ -108,5 +107,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         ########## 
                         #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
                         ## LOWELL ##
-                    
+    elif SimMode == 1 : 
+        for User in User_List : 
+            for cDate in range(start_date, end_date + 1) : 
                 
