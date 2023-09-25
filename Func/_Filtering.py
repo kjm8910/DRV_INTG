@@ -100,9 +100,8 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
     return sp_maf_list
 
 def func_speed_filter(plug_time_list, plug_sp_list, plug_ac_list) : 
-    #if PLUG TYPE == 'LUX1' : 
+    
     plug_sp_list = preprocessing_speed(plug_time_list, plug_sp_list)
     sp_maf_list = MovingAverageFilter(plug_time_list, plug_sp_list)    
-    #### 
     
     return sp_maf_list
