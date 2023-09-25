@@ -4,13 +4,15 @@ from Func._BBI_Func import *
 from Func._Analysis_tool import *
 from Func._Graph_tool import * 
 
+
 def Start_Simulation(SimMode, Date_List, User_List, Plug_List) : 
     start_date = int(Date_List[0])
     end_date = int(Date_List[1])
     trip_id = 0
     if SimMode == 0 : 
         for User in User_List : 
-            for cDate in range(start_date, end_date + 1) : 
+            for cDate in range(start_date, end_date + 1) :
+                print(cDate)
                 #### 1. 파싱 ######################################
                 # a. Referece 유/무 판단 / 플러그 데이터 유/무 판단
                 flag_plug = Check_Plug(cDate, User)
@@ -100,10 +102,15 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         print('\n')
                         
                     ########## Plot Graph ################
-                    figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\
-                        REF_TIME_SAVE, REF_RAW_SAVE, DF_PLUG_SAVE, DF_PLUG_MAF_SAVE, \
-                            DF_REF_SAVE, flag_and, User, cDate, Trip_Num)
-                    
+                    # figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\
+                    #     REF_TIME_SAVE, REF_RAW_SAVE, DF_PLUG_SAVE, DF_PLUG_MAF_SAVE, \
+                    #         DF_REF_SAVE, flag_and, User, cDate, Trip_Num)
                         ########## 
                         #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
                         ## LOWELL ##
+                        plot_main(
+                            t_plug=plug_time_list, t_ref=ref_time_list, sp_plug=plug_sp_raw_list,
+                            sp_plug_filter=sp_maf_list, sp_ref=ref_sp_list, df_bbi_plug=df_raw_bbi,
+                            df_bbi_plug_filter=df_maf_bbi, df_bbi_ref=df_ref_bbi,
+                            user_str=User, trip_str=str(i), date_str=str(cDate), dvc_str=Plug_List[0]
+                        )
