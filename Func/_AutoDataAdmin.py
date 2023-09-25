@@ -25,9 +25,8 @@ def Android_Data_Download() :
 
     PROJECT_ID = "drv-bbi-test"
 
-    cred = credentials.Certificate('/Users/jmkim/Documents/'+\
-        'Finn_Python_Project/FireBase_KEY/'+\
-            'drv-bbi-test-firebase-adminsdk-wpdve-3732218d83.json')
+    cred = credentials.Certificate('//Users/jmkim/Documents/Finn_Python_Project/FireBase_KEY/'+\
+            'drv-bbi-test-firebase-adminsdk-wpdve-3f64ab418b.json')
     try : 
         storage_admin = firebase_admin.get_app()
     except : 
@@ -79,9 +78,8 @@ def PlugData_Upload() :
     ROJECT_PATH = Path('.').absolute()
 
     PROJECT_ID = "drv-bbi-test" 
-    cred = credentials.Certificate('/Users/jmkim/Documents/'+\
-        'Finn_Python_Project/FireBase_KEY/'+\
-            'drv-bbi-test-firebase-adminsdk-wpdve-3732218d83.json')
+    cred = credentials.Certificate('//Users/jmkim/Documents/Finn_Python_Project/FireBase_KEY/'+\
+            'drv-bbi-test-firebase-adminsdk-wpdve-3f64ab418b.json')
     
     try : 
         storage_admin = firebase_admin.get_app()
@@ -134,16 +132,15 @@ def PlugData_Upload() :
                     fileName = part.get_filename()
                     fileName = encoded_words_to_text(fileName)
 
-                    if bool(fileName):
-                        filePath = os.path.join(detach_dir, 'Zip_Data',fileName)
-                        if not os.path.isfile(filePath) :
-                            print(fileName)
-                            fp = open(filePath, 'wb')
-                            fp.write(part.get_payload(decode=True))
-                            fp.close()
+                    #if bool(fileName):
+                    filePath = os.path.join(detach_dir, 'Zip_Data',fileName)
+                    #if not os.path.isfile(filePath) :
+                    print(fileName)
+                    fp = open(filePath, 'wb')
+                    fp.write(part.get_payload(decode=True))
+                    fp.close()
             
-            imapSession.close()
-            imapSession.logout()
+           
             
             # 압출 풀기
             zip_file_list = os.listdir(detach_dir+'/Zip_Data')
@@ -151,12 +148,11 @@ def PlugData_Upload() :
                 if file_name.find('.zip') != -1 : 
                     date = file_name[:-4]
                     zipfile.ZipFile(f'{detach_dir}/Zip_Data/{file_name}').extractall(path=f'{detach_dir}/FB_Data/{date}/')   
-            
                     bucket = storage.bucket()
-
                     dir_firebase = f'{detach_dir}/FB_Data/{date}/'
-            csv_folder_list = os.listdir(detach_dir+'/FB_Data')
+                    os.remove(detach_dir+'/Zip_Data/'+file_name)
             
+            csv_folder_list = os.listdir(detach_dir+'/FB_Data')
             for folder in csv_folder_list : 
                 dir_csv_folder = f'{detach_dir}/FB_Data/{folder}/'
                 #full_name = os.path.join(dir_csv_folder)
@@ -170,13 +166,25 @@ def PlugData_Upload() :
                     date = csv_path[date_ad-8:date_ad]
                     csvBlob = bucket.blob(f"PLUG_GNSS_DATA/{date}/{file_csv}")
                     csvBlob.upload_from_filename(csv_path)
+            imapSession.close()
+            imapSession.logout()
         except :
-            #print ('첨부 파일 다운로드 불가')
+            # 압출 풀기
+            zip_file_list = os.listdir(detach_dir+'/Zip_Data')
+            for file_name in zip_file_list : 
+                if file_name.find('.zip') != -1 : 
+                    date = file_name[:-4]
+                    zipfile.ZipFile(f'{detach_dir}/Zip_Data/{file_name}').extractall(path=f'{detach_dir}/FB_Data/{date}/')   
+                    #os.remove(detach_dir+'/Zip_Data/'+file_name)
+                    bucket = storage.bucket()
+                    dir_firebase = f'{detach_dir}/FB_Data/{date}/'
+            csv_folder_list = os.listdir(detach_dir+'/FB_Data')
+            
             cTime = datetime.datetime.now()
             if cTime.hour >= 19 : 
                 break
             else : 
-                time.sleep(30)
+                time.sleep(2)
 
 def encoded_words_to_text(encoded_words):
     try:
