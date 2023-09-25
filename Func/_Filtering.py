@@ -1,4 +1,4 @@
-#230808 Speed Noise Filter
+#Speed Noise Filter
 import numpy as np
 #from haversine import haversine
 
