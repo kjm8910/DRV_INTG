@@ -54,9 +54,9 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
         if i <= 10 : 
             sp_maf_list[i] = plug_sp_list[i]
             continue
-        else        : 
-            dt = (plug_time_list[i] - plug_time_list[i-1]) / 1000
-            del_sp = abs(plug_sp_list[i] - plug_sp_list[i-1])
+        #else        : 
+        #    dt = (plug_time_list[i] - plug_time_list[i-1]) / 1000
+        #    del_sp = abs(plug_sp_list[i] - plug_sp_list[i-1])
 
         # MAF       
         sp_maf = np.mean(plug_sp_list[i:i+N])
@@ -68,9 +68,11 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
     # 0. 초기화
     cnt_skip = 0
     
-    # 1. 초반 10초는 BBI 처리 안함(1초부터 9초까지 데이터를 데이터를 10초 데이터로 변경)
+    # 1. 초반 20초 & 마지막 10초는 BBI 처리 안함
+    # 1초부터 20초까지 데이터를 데이터를 20초 데이터로 변경
+    # N-19 ~ N(마지막 20초) 데이터를 N-19초 데이터로 변경
     sp_maf_list[0:20] = sp_maf_list[19] 
-    
+    sp_maf_list[-20:] = sp_maf_list[-20] 
     for i in range(1, len(sp_maf_list)-14) : 
     
         cTime = plug_time_list[i]
@@ -79,10 +81,10 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
         curSP = sp_maf_list[i]
         preSP = sp_maf_list[i-1]
       
-        dt = (cTime - pTime )/1000 
+        #dt = (cTime - pTime )/1000 
         #if dt == 0 : 
         #    dt = 1
-        delV = (curSP - preSP) / dt
+        #delV = (curSP - preSP) / dt
         # dt가 2초가 넘는 구간이 있으면 -5초 ~ 10초까지 bbi 평가 안함
         dt_skip = abs(plug_time_list[i+5]-plug_time_list[i+4]) / 1000
         if dt_skip >= 2 : 

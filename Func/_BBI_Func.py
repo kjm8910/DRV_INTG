@@ -15,7 +15,7 @@ def bbi_detection_no_exception(time_list, sp_list, ln_list, lt_list) :
     pos_bbi_list = []
     bbi_result_list = []
     
-    for i in range(1, len(sp_list)-10) : 
+    for i in range(1, len(sp_list)) : 
         
         cTime = time_list[i]
         pTime = time_list[i-1]

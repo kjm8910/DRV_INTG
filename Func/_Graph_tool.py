@@ -33,11 +33,6 @@ def figure_plot(plug_time_list, plug_sp_raw_list, maf_result_list, \
             axes[1].legend()
             axes[1].grid()
             plt.get_current_fig_manager().window.wm_geometry(f"+{x}+{y}")
-            if (i+1)%4== 0 : 
-                y += 500
-                x = 0
-            else :
-                x += 500
         elif flag_ref == True :
             fig, axes = plt.subplots(nrows=3, ncols=1, sharex=True, sharey=True)
             bbi_time_raw = df_bbi_raw[i].Time
@@ -61,11 +56,11 @@ def figure_plot(plug_time_list, plug_sp_raw_list, maf_result_list, \
             axes[2].legend()
             axes[2].grid()
             plt.get_current_fig_manager().window.wm_geometry(f"+{x}+{y}")
-            if (i+1)%4== 0 : 
-                y += 500
-                x = 0
-            else :
-                x += 500
+        if (i+1)%4== 0 : 
+            y += 500
+            x = 0
+        else :
+            x += 500
                 
     plt.show(block=False)
     while True : 
