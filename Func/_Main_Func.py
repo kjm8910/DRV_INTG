@@ -12,7 +12,6 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
     if SimMode == 0 : 
         for User in User_List : 
             for cDate in range(start_date, end_date + 1) :
-                print(cDate)
                 #### 1. 파싱 ######################################
                 # a. Referece 유/무 판단 / 플러그 데이터 유/무 판단
                 flag_plug = Check_Plug(cDate, User)
