@@ -95,9 +95,17 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         #### 4. 분석 결과 출력 ###############################
                         # a. 지도, b. 그래프, c. BBI 결과
                         if flag_and == False : bbi_list_ref = []
+                        print("==========================================")
                         print(str(cDate) +' ' + User+' '+'Trip No.' + str(i+1))
+                        Trip_time_sec = (max(plug_time_list) - min(plug_time_list))/1000
+                        Trip_time = time.strftime('%H:%M:%S', time.gmtime(Trip_time_sec))
+                        print("Trip Total Time : "+str(Trip_time))
+                        num_dt_over = count_dt_over(plug_time_list)
+                        print("DT >= 2 : ", str(num_dt_over))
                         bbi_result_table(bbi_list_raw, bbi_list_maf, bbi_list_ref, i)
+                        print("==========================================")
                         print('\n')
+                        
                         
                     ########## Plot Graph ################
                     figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\

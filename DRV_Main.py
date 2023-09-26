@@ -10,6 +10,7 @@ User_List = ['Finn']
 Plug_List = ['lux1']
 # d. Simulation Mode Type
 #   0 : User, 1 : Plug, ( 2 : User & Plug X)
+#   3 : Reference Only Mode
 SimMode = 0
 
 #### 3.Simulation Start ##################################
