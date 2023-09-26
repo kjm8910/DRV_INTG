@@ -5,14 +5,14 @@ import time
 matplotlib.use('TkAgg')
 
 def figure_plot(plug_time_list, plug_sp_raw_list, maf_result_list, \
-    ref_time_list, ref_sp_list, df_bbi_raw, df_bbi_maf, df_bbi_ref, flag_ref,\
+    ref_time_list, ref_sp_list, df_bbi_raw, df_bbi_maf, df_bbi_ref, \
         User, Date, Trip_Num) :         
     x = 0
     y = 0
     for i in range(0, Trip_Num) : 
         
         try : 
-            if len(df_bbi_ref[i]) != 0 : flag_ref = True
+            if len(ref_sp_list[i]) != 0 : flag_ref = True
             else : flag_ref = False
         except : 
             flag_ref = False

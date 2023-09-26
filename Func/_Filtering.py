@@ -1,6 +1,6 @@
 #Speed Noise Filter
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def preprocessing_speed(plug_time_list, plug_sp_list) : 
     for i in range(1, len(plug_sp_list)-10) : 
@@ -64,6 +64,10 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
         
     sp_maf_list[len(plug_sp_list)-N:] = plug_sp_list[len(plug_sp_list)-N:]
     
+    return sp_maf_list
+
+def BBI_Exception_Handle(plug_time_list, sp_maf_list) : 
+    
     #### BBI 예외처리 #####
     # 0. 초기화
     cnt_skip = 0
@@ -80,11 +84,18 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
         
         curSP = sp_maf_list[i]
         preSP = sp_maf_list[i-1]
-      
-        #dt = (cTime - pTime )/1000 
-        #if dt == 0 : 
-        #    dt = 1
-        #delV = (curSP - preSP) / dt
+        futSP = sp_maf_list[i+3]
+        # 3개의 속력 데이터 i~i+3의 dSP에서 하나라도 10이 넘
+        if curSP <= 5 and futSP >= 30 : 
+            sp_maf_list[i+1] = sp_maf_list[i] + 11
+            sp_maf_list[i+2] = (sp_maf_list[i+1] + sp_maf_list[i+3]) / 2
+        
+        # 3개의 속력 데이터 i~i+3의 dSP에서 하나라도 10이 넘
+        if futSP <= 5 and curSP >= 30 : 
+            sp_maf_list[i+2] = sp_maf_list[i+3] + 11
+            sp_maf_list[i+1] = (sp_maf_list[i] + sp_maf_list[i+2]) / 2
+        
+        
         # dt가 2초가 넘는 구간이 있으면 -5초 ~ 10초까지 bbi 평가 안함
         dt_skip = abs(plug_time_list[i+5]-plug_time_list[i+4]) / 1000
         if dt_skip >= 2 : 
@@ -96,12 +107,13 @@ def MovingAverageFilter(plug_time_list, plug_sp_list) :
             sp_maf_list[i] = sp_maf_list[i-1] + delta_SP
             cnt_skip -= 1
             continue
-    
+        
     return sp_maf_list
+
 
 def func_speed_filter(plug_time_list, plug_sp_list, plug_ac_list) : 
     
     plug_sp_list = preprocessing_speed(plug_time_list, plug_sp_list)
     sp_maf_list = MovingAverageFilter(plug_time_list, plug_sp_list)    
-    
-    return sp_maf_list
+    sp_result_list = BBI_Exception_Handle(plug_time_list, sp_maf_list)
+    return sp_result_list

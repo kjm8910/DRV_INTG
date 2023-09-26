@@ -123,7 +123,7 @@ def Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data) :
             except : 
                 Ref_Data_Trip_list.append(pd.DataFrame([]))
         else : 
-            Ref_Data_Trip_list = []
+            Ref_Data_Trip_list.append([])
         
     return trip_number, Plug_Data_Trip_list, Ref_Data_Trip_list
 

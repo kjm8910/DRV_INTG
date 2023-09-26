@@ -35,9 +35,9 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     
                     for i in range(0, Trip_Num) : 
                         
-                        if len(Ref_Data_Trip) == 0 : flag_and = False
-                        elif len(Ref_Data_Trip[i]) == 0: flag_and = False
-                        else :                          flag_and = True
+                        if len(Ref_Data_Trip) == 0 :        flag_and = False
+                        elif len(Ref_Data_Trip[i]) == 0:    flag_and = False
+                        else :                              flag_and = True
                         
                         if flag_and == True : 
                             ref_ln_list = list(Ref_Data_Trip[i]['latitude'])
@@ -102,7 +102,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                     ########## Plot Graph ################
                     figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\
                         REF_TIME_SAVE, REF_RAW_SAVE, DF_PLUG_SAVE, DF_PLUG_MAF_SAVE, \
-                            DF_REF_SAVE, flag_and, User, cDate, Trip_Num)
+                            DF_REF_SAVE, User, cDate, Trip_Num)
                     
                         ########## 
                         #folium_map(plug_lt_list, plug_ln_list, df_maf_bbi, cDate, User, 'MAF')
