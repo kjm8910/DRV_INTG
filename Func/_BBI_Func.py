@@ -1,7 +1,7 @@
 ## Module Define
 import numpy as np
 from pandas import Series, DataFrame
-
+import pandas as pd
 def bbi_detection_no_exception(time_list, sp_list, ln_list, lt_list) : 
     
     bbi_result = np.zeros([4])
@@ -188,3 +188,9 @@ def bbi_detection_v001(time_list, sp_list) :
             continue
             
     return bbi_result, time_bbi_list
+
+def count_dt_over(plug_time_list) : 
+    dt_list = np.diff(plug_time_list)/1000
+    mask = (dt_list >= 2)
+    num_dt_over = len(dt_list[mask])
+    return num_dt_over
