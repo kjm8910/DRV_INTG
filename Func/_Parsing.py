@@ -115,7 +115,6 @@ def Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data) :
         cTrip_id = i + 1
         Plug_Data_Trip_list.append(Plug_Data[Plug_Data.trip_id == cTrip_id])
         if flag_and == True : 
-        
             try : 
                 mask = (Ref_Data.time[ad_ref:] <= max(Plug_Data_Trip_list[i].ct)) & (Ref_Data.time[ad_ref:] >= min(Plug_Data_Trip_list[i].ct))
                 Ref_Data_Trip_list.append(Ref_Data[ad_ref:].loc[mask])

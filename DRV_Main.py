@@ -3,7 +3,7 @@ from Func._Main_Func import *
 #### 0. 초기값 입력 ########################################
 # a. 분석할 날짜x
 #   [0] : Start Date / [1] End Date
-Date_List = ['20230920', '20230922']
+Date_List = ['20230914', '20230922']
 # b. User List
 User_List = ['Finn']
 # c. Plug type List
