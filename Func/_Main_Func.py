@@ -3,7 +3,7 @@ from Func._Filtering import *
 from Func._BBI_Func import *
 from Func._Analysis_tool import *
 from Func._Graph_tool import * 
-
+from Func._map_tool import *
 
 def Start_Simulation(SimMode, Date_List, User_List, Plug_List) : 
     start_date = int(Date_List[0])
@@ -117,6 +117,19 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                             user_str=User, trip_str=str(i), date_str=str(cDate), dvc_str=Plug_List[0]
                         )
                         '''
+                        
+                        ## Hannah
+                        m = draw_map(plug_lt_list,plug_ln_list, plug_time_list,\
+                            plug_sp_raw_list, sp_maf_list, df_raw_bbi, df_maf_bbi)
+                        save_path = str(cDate)+'_'+str(User)+'.html'
+                        m.save(save_path)
+                        if flag_and == True:
+                            m_ref = draw_map_rtk(plug_lt_list,plug_ln_list, plug_time_list, \
+                                plug_sp_raw_list, sp_maf_list, df_raw_bbi, df_maf_bbi, \
+                                ref_lt_list, ref_ln_list, ref_time_list, ref_sp_list, \
+                                    df_ref_bbi)
+                            save_path = str(cDate)+'_'+str(User)+'_ref.html'
+                            m_ref.save(save_path) 
                     ########## Plot Graph ################
                     figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\
                         REF_TIME_SAVE, REF_RAW_SAVE, DF_PLUG_SAVE, DF_PLUG_MAF_SAVE, \
