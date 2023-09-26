@@ -1,6 +1,7 @@
-#Speed Noise Filter
+#### Module Define ######################################
 import numpy as np
 import matplotlib.pyplot as plt
+#### ####################################################
 
 def preprocessing_speed(plug_time_list, plug_sp_list) : 
     for i in range(1, len(plug_sp_list)-10) : 
@@ -109,11 +110,3 @@ def BBI_Exception_Handle(plug_time_list, sp_maf_list) :
             continue
         
     return sp_maf_list
-
-
-def func_speed_filter(plug_time_list, plug_sp_list, plug_ac_list) : 
-    
-    plug_sp_list = preprocessing_speed(plug_time_list, plug_sp_list)
-    sp_maf_list = MovingAverageFilter(plug_time_list, plug_sp_list)    
-    sp_result_list = BBI_Exception_Handle(plug_time_list, sp_maf_list)
-    return sp_result_list

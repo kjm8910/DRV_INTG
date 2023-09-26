@@ -1,5 +1,6 @@
 from Func._Parsing import *
-from Func._Filtering import *
+from Func._Filter import *
+from Func._LUX1_Filtering import *
 from Func._BBI_Func import *
 from Func._Analysis_tool import *
 from Func._Graph_tool import * 
@@ -20,6 +21,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                 else : 
                     flag_and = Check_Android(cDate, User)
                     Plug_Data, Ref_Data = Parsing_Main(cDate, User, 0, flag_and)
+                    Plug_Type = Plug_Data.dvc_id[0]
                     # c. 트립으로 나누기
                     Trip_Num, Plug_Data_Trip, Ref_Data_Trip = Data_Seperate_Trip(Plug_Data, flag_and, Ref_Data)
                     
@@ -66,7 +68,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         plug_ac_list = list(Plug_Data_Trip[i]['ac'])
 
                         sp_maf_list = func_speed_filter(plug_time_list,\
-                            plug_sp_list, plug_ac_list)
+                            plug_sp_list, plug_ac_list, Plug_Type)
 
                         ### DATA SAVE ####
                         PLUG_TIME_SAVE.append(plug_time_list)
@@ -119,6 +121,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                         '''
                         
                         ## Hannah
+                        '''
                         m = draw_map(plug_lt_list,plug_ln_list, plug_time_list,\
                             plug_sp_raw_list, sp_maf_list, df_raw_bbi, df_maf_bbi)
                         save_path = str(cDate)+'_'+str(User)+'.html'
@@ -130,6 +133,7 @@ def Start_Simulation(SimMode, Date_List, User_List, Plug_List) :
                                     df_ref_bbi)
                             save_path = str(cDate)+'_'+str(User)+'_ref.html'
                             m_ref.save(save_path) 
+                            '''
                     ########## Plot Graph ################
                     figure_plot(PLUG_TIME_SAVE, PLUG_RAW_SAVE, PLUG_MAF_SAVE,\
                         REF_TIME_SAVE, REF_RAW_SAVE, DF_PLUG_SAVE, DF_PLUG_MAF_SAVE, \
